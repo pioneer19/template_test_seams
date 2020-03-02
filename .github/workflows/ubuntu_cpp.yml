@@ -1,0 +1,25 @@
+name: ubuntu-latest build/test
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: install clang-9
+      run: |
+        sudo apt update && sudo apt install -y clang-9 libc++-9-dev libc++abi-9-dev \
+            && sudo apt autoremove -y --purge
+
+    - name: build
+      run: |
+        mkdir build && cd build
+        cmake -DCMAKE_BUILD_TYPE=Release ../
+        cmake --build . -- -j 2
+        sync
+    - name: test
+      run: |
+        cd build
+        ctest --output-on-failure -j 2
