@@ -16,10 +16,11 @@ jobs:
     - name: build
       run: |
         mkdir build && cd build
-        cmake -DCMAKE_BUILD_TYPE=Release ../
-        cmake --build . -- -j 2
+        CC=clang-9 CXX=clang++-9 cmake -DCMAKE_BUILD_TYPE=Release ../
+        cmake --build . -- -j 2 VERBOSE=1
         sync
     - name: test
       run: |
         cd build
-        ctest --output-on-failure -j 2
+        ./test_file
+        ./main
